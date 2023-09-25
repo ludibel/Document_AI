@@ -22,13 +22,13 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@components/*": [
+      "@/components/*": [
         "src/components/*"
       ],
-      "@utils/*": [
+      "@/utils/*": [
         "src/utils/*"
       ],
-      "@styles/*": ["src/styles/*"],
+      "@/styles/*": ["src/styles/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx",".next/types/**/*.ts"],
