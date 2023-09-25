@@ -1,4 +1,7 @@
 import Head from 'next/head'
+import { Grid } from '@mui/material'
+// import components
+import Hero from '@/components/Hero'
 
 export default function Home() {
   return (
@@ -11,10 +14,17 @@ export default function Home() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main>
-        <h1>Document AI</h1>
-        <p>Uploadez vos documents et posez vos questions dans le chat</p>
-      </main>
+      <Grid container spacing={2} direction="row">
+        <Grid item xs={12}>
+          <Hero
+            title="Interrogez vos documents avec OPENAI"
+            para="Uploadez vos documents et posez vos questions dans le chat"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <p>chat</p>
+        </Grid>
+      </Grid>
     </>
   )
 }
