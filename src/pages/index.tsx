@@ -2,8 +2,9 @@ import Head from 'next/head'
 import { Grid } from '@mui/material'
 // import components
 import Hero from '@/components/Hero'
+import Chat from '@/components/ChatComponent'
 
-export default function Home() {
+const Home = () => {
   return (
     <>
       <Head>
@@ -22,9 +23,11 @@ export default function Home() {
           />
         </Grid>
         <Grid item xs={12}>
-          <p>chat</p>
+          <Chat />
         </Grid>
       </Grid>
     </>
   )
 }
+
+export default Home
