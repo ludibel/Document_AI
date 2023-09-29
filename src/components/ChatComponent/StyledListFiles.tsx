@@ -1,5 +1,6 @@
+// import emotion styled
 import styled from '@emotion/styled'
-
+// import mui
 import { Card, Button, CardContent, Typography } from '@mui/material'
 
 export const StyledCard = styled(Card)({

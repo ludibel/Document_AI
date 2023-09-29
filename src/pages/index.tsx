@@ -1,4 +1,5 @@
 import Head from 'next/head'
+// import mui
 import { Grid } from '@mui/material'
 // import components
 import Hero from '@/components/Hero'

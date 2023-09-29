@@ -1,5 +1,6 @@
+// import emotion styled
 import styled from '@emotion/styled'
-
+// import mui
 import { Grid } from '@mui/material'
 
 export const StyledGridLeft = styled(Grid)({

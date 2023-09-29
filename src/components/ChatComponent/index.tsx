@@ -1,4 +1,6 @@
 import React from 'react'
+//import components
+import ChatBox from '@/components/ChatBox'
 // import style
 import { Grid } from '@mui/material'
 import { StyledGridLeft, StyledGridcontainer } from './StyledChat'
@@ -15,7 +17,7 @@ const Chat = () => {
         <ListFiles />
       </StyledGridLeft>
       <Grid item xs={9}>
-        chat
+        <ChatBox />
       </Grid>
     </StyledGridcontainer>
   )

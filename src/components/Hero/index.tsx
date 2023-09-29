@@ -1,11 +1,13 @@
+// import mui
 import { Grid } from '@mui/material'
+// import style
 import {
   StyledBox,
   StyledGridContainer,
   StyledTypoTitle,
   StyledTypo,
 } from './StyledHero'
-
+// import types
 import { HeroProps } from '@/utils/types/general'
 
 const Hero = ({ title = 'Bienvenue sur document AI', para }: HeroProps) => {
