@@ -2,13 +2,20 @@ import React from 'react'
 // import components
 import TitleDialog from '@/components/TitleDialog'
 import DropZone from '@/components/DropZone'
+import MessageAlert from '@/components/MessageAlert'
 // import mui
 import { Button, DialogActions } from '@mui/material'
 import { StyledDialog, StyledDialogContent } from './StyledDialogDropZone'
 // import types
 import { DialogDropZoneProps } from '@/utils/types/dialog'
 
-const DialogDropZone = ({ handleClose, open }: DialogDropZoneProps) => {
+const DialogDropZone = ({
+  handleClose,
+  open,
+  openAlert,
+  statusAlert,
+  messageAlert,
+}: DialogDropZoneProps) => {
   return (
     <StyledDialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <TitleDialog
@@ -17,7 +24,12 @@ const DialogDropZone = ({ handleClose, open }: DialogDropZoneProps) => {
         title={'Enregistrez votre document'}
       />
       <StyledDialogContent dividers>
-        {/* Ajouter le composant Message d'alerte */}
+        {openAlert && statusAlert === 'ok' && (
+          <MessageAlert status="success" message={messageAlert} />
+        )}
+        {openAlert && statusAlert === 'fail' && (
+          <MessageAlert status="error" message={messageAlert} />
+        )}
         <DropZone />
       </StyledDialogContent>
       <DialogActions>

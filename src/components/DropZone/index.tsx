@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react'
 // import react-dropzone
 import { FileWithPath, useDropzone } from 'react-dropzone'
+// import components
+import MessageAlert from '@/components/MessageAlert'
 // import style
 import {
   StyledBox,
@@ -86,7 +88,12 @@ const DropZone = () => {
   })
   return (
     <StyledBox>
-      {/* // ajouter Alerte Message */}
+      {openAlert && statusAlert === 'ok' && (
+        <MessageAlert status="success" message={message} />
+      )}
+      {openAlert && statusAlert === 'fail' && (
+        <MessageAlert status="error" message={message} />
+      )}
       <StyledContainer
         {...getRootProps({
           'aria-label': 'drag and drop area',
