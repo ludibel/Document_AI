@@ -1,6 +1,7 @@
 import React from 'react'
 // import components
 import TitleDialog from '@/components/TitleDialog'
+import DropZone from '@/components/DropZone'
 // import mui
 import { Button, DialogActions } from '@mui/material'
 import { StyledDialog, StyledDialogContent } from './StyledDialogDropZone'
@@ -17,7 +18,7 @@ const DialogDropZone = ({ handleClose, open }: DialogDropZoneProps) => {
       />
       <StyledDialogContent dividers>
         {/* Ajouter le composant Message d'alerte */}
-        {/* Ajouter le composant DialogDropZone */}
+        <DropZone />
       </StyledDialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Annuler</Button>
