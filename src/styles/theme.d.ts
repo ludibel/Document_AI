@@ -19,7 +19,6 @@ declare module '@emotion/react' {
             500: CSSProperties['color']
         }
     }
-    spacing: number | string 
   }
 
 }

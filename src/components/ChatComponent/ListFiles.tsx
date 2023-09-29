@@ -12,17 +12,14 @@ import {
 } from './StyledListFiles'
 // import mui
 import { FormControl, MenuItem, Select } from '@mui/material'
+import { ListFilesProps } from '@/utils/types/general'
 
 const listVector = ['vector1', 'vector2', 'vector3', 'vector4', 'vector5']
 
-const ListFiles = () => {
+const ListFiles = ({ handleClickUpload }: ListFilesProps) => {
   const [selectedValue, setSelectedValue] = useState<string>('')
   const handleChange = (event: { target: { value: string } }) => {
     setSelectedValue(event.target.value)
-  }
-
-  const handleClickUpload = () => {
-    console.log('upload')
   }
 
   const handleClickGestion = () => {

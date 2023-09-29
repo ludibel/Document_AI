@@ -20,7 +20,6 @@ const themePerso: Theme = createTheme({
     }
 
   },
-  spacing: 8,
 });
 
 export default themePerso
