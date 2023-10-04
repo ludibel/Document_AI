@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 //import components
 import ChatBox from '@/components/ChatBox'
 import DialogDropZone from '@/components/DialogDropZone'
@@ -6,17 +6,27 @@ import DialogDropZone from '@/components/DialogDropZone'
 import { Grid } from '@mui/material'
 import { StyledGridLeft, StyledGridcontainer } from './StyledChat'
 import ListFiles from './ListFiles'
+// import context
+import FileContext, { FileContextProps } from '@/utils/context/fileContext'
 
 const Chat = () => {
   // gestion dialog dropzone
   const [openDialogDropZone, setOpenDialogDropZone] = useState(false)
+  const [openAlert, setOpenAlert] = useState(false)
+  const [statusAlert, setStatusAlert] = useState(undefined)
+  const [messageAlert, setMessageAlert] = useState('')
 
-  const handleCloseDialogDropZone = () => {
-    setOpenDialogDropZone(false)
-  }
+  const { setIsFileUploaded, fileName, setFileName } = useContext(
+    FileContext
+  ) as FileContextProps
 
+  // gestion de DialogDropZone
   const handleClickUpload = () => {
     setOpenDialogDropZone(true)
+  }
+  const handleCloseDialogDropZone = () => {
+    setOpenDialogDropZone(false)
+    setIsFileUploaded(false)
   }
 
   return (
@@ -24,6 +34,9 @@ const Chat = () => {
       <DialogDropZone
         open={openDialogDropZone}
         handleClose={handleCloseDialogDropZone}
+        openAlert={openAlert}
+        statusAlert={statusAlert}
+        messageAlert={messageAlert}
       />
       <StyledGridcontainer
         container
