@@ -2,7 +2,7 @@ export interface DialogDropZoneProps {
   handleClose: () => void
   open: boolean
   openAlert: boolean
-  statusAlert: 'ok' | 'fail' | undefined
+  statusAlert: string
   messageAlert: string
   notHandleClose: () => void
 }

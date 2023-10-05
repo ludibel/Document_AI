@@ -6,7 +6,7 @@ import {
   StyledBox,
   StyledAlert,
 } from '@/components/MessageAlert/StyledMessageAlert'
-// typages
+// import types
 import { DialogAlertProps } from '@/utils/types/dialog'
 
 const MessageAlert = ({ status = 'error', message }: DialogAlertProps) => {

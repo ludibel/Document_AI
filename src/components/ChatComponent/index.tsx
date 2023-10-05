@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 //import components
 import ChatBox from '@/components/ChatBox'
 import DialogDropZone from '@/components/DialogDropZone'
+import DialogRemoveFile from '@/components/DialogRemoveFile'
 // import style
 import { Grid } from '@mui/material'
 import { StyledGridLeft, StyledGridcontainer } from './StyledChat'
@@ -10,16 +11,22 @@ import ListFiles from './ListFiles'
 import FileContext, { FileContextProps } from '@/utils/context/fileContext'
 
 const Chat = () => {
-  // gestion dialog dropzone
   const [openDialogDropZone, setOpenDialogDropZone] = useState(false)
+  const [openDialogRemoveFile, setOpenDialogRemoveFile] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
-  const [statusAlert, setStatusAlert] = useState(undefined)
+  const [statusAlert, setStatusAlert] = useState('')
   const [messageAlert, setMessageAlert] = useState('')
 
-  const { setIsFileUploaded, fileName, setFileName } = useContext(
+  const { setIsFileUploaded, fileName, setFileName, setShowFile } = useContext(
     FileContext
   ) as FileContextProps
-
+  // fermeture de l'alerte au bout de 2 secondes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setOpenAlert(false)
+    }, 2000)
+    return () => clearTimeout(timer)
+  }, [openAlert])
   // gestion de DialogDropZone
   const handleClickUpload = () => {
     setOpenDialogDropZone(true)
@@ -28,13 +35,53 @@ const Chat = () => {
     setOpenDialogDropZone(false)
     setIsFileUploaded(false)
   }
-  // open dialogRemoveFile
+  // gestion de dialogRemoveFile
   const notHandleClose = () => {
     setOpenDialogDropZone(true)
+    setOpenDialogRemoveFile(true)
+    setShowFile(false)
     const timer = setTimeout(() => {
       setOpenAlert(false)
     }, 2000)
     return () => clearTimeout(timer)
+  }
+  const handleCloseDialogRemoveFile = () => {
+    setOpenDialogRemoveFile(false)
+  }
+
+  // suppression du fichier
+  const handleRemove = async () => {
+    try {
+      const response = await fetch('/api/deleteFile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: fileName }),
+      })
+      const responseStatus = await response.json()
+      if (responseStatus.status === 'ok') {
+        setOpenAlert(true)
+        setMessageAlert(responseStatus.message)
+        setStatusAlert('ok')
+        setIsFileUploaded(false)
+        setFileName('')
+      }
+      if (responseStatus.status === 'fail') {
+        setOpenAlert(true)
+        setMessageAlert(responseStatus.message)
+        setStatusAlert('fail')
+      }
+      setOpenDialogRemoveFile(false)
+      setOpenAlert(true)
+      setMessageAlert(responseStatus.message)
+    } catch (error) {
+      setOpenAlert(true)
+      setMessageAlert(
+        `une erreur s'est produite lors de la suppression du fichier`
+      )
+      setStatusAlert('fail')
+    }
   }
   return (
     <>
@@ -45,6 +92,12 @@ const Chat = () => {
         statusAlert={statusAlert}
         messageAlert={messageAlert}
         notHandleClose={notHandleClose}
+      />
+      <DialogRemoveFile
+        open={openDialogRemoveFile}
+        handleClose={handleCloseDialogRemoveFile}
+        handleNotRemove={handleCloseDialogRemoveFile}
+        handleRemove={handleRemove}
       />
       <StyledGridcontainer
         container

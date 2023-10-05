@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 // import react-dropzone
 import { FileWithPath, useDropzone } from 'react-dropzone'
 // import context
@@ -48,6 +48,14 @@ const DropZone = ({ deleteFile }: DropZoneProps) => {
   // hooks loading
   const [loading, setLoading] = useState<boolean>(false)
   const [document, setDocument] = useState<Document | null>(null)
+
+  // timer pour fermer l'alerte
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setOpenAlert(false)
+    }, 2000)
+    return () => clearTimeout(timer)
+  }, [openAlert])
 
   const {
     setShowFile,
@@ -130,9 +138,9 @@ const DropZone = ({ deleteFile }: DropZoneProps) => {
       }
     }
   }, [])
-  // getRootProps permet d'obtenir les fonctionnalités de drag and dop
+  // getRootProps permet d'obtenir les fonctionnalités de drag and drop
   // open est passé à Button pour lui permettre d'ouvrir le répertoire de fichiers
-  // getInputProps utilisé pour crér la zone de drag and drop
+  // getInputProps utilisé pour créer la zone de drag and drop
   // acceptedFiles vérifie si les fichiers sont accéptés selon des contraintes définies
   // noClick et noKeyBoard si ils sont à true permettent de ne pas pouvoir ouvrir le gestionnaire de fichier en cliquant sur la dropzone ou en appuyant sur les touches entrée et espace
 
@@ -158,7 +166,7 @@ const DropZone = ({ deleteFile }: DropZoneProps) => {
         {...getRootProps({
           'aria-label': 'drag and drop area',
         })}
-        isdisabled={isFileUploaded ? true : undefined}
+        isdisabled={isFileUploaded}
       >
         <input {...getInputProps()} />
         {isDragActive ? (

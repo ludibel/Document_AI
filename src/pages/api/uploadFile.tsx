@@ -39,7 +39,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       name: '',
     },
   }
-  // determmine le coût d'embeddings d'un document
+  // determine le coût d'embeddings d'un document
   const determinateCost = async (document: object | undefined) => {
     const modelName = 'text-embedding-ada-002'
     const modelKey = models[modelName]
@@ -65,13 +65,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const fileName = file[1]?.originalFilename
       const extension = fileName.split('.').pop()
       const fileNameSlug = slugName(fileName.split('.')[0])
-      console.log('fileNameSlug', fileNameSlug)
       // on recupere le chemin du fichier
       const filePath = path.join(directory, fileNameSlug)
-      console.log('filePath', filePath)
       // on charge le fichier
       const doc = await LoadFile({ extension, filePath })
-      console.log('doc', doc)
       // on calcule le coût d'embeddings du fichier
       const cost = await determinateCost(doc)
       //  on enregistre le document dans le répertoire public/embeddings
@@ -91,7 +88,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       return { cost, doc }
     } catch (error) {
-      console.error(`Une erreur s'est produite :`, error)
+      alert(`Une erreur s'est produite `)
     }
   }
 
@@ -144,7 +141,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // déplacement des fichiers dans le répertoire public/upload
     for (const file of files) {
       const ext = ['pdf', 'docx', 'json', 'csv', 'txt']
-      // const name = Object.values(file)[1].originalFilename
       const name = file[1].originalFilename
       const fileNameSlug = slugName(name.split('.')[0])
       const extension = name?.split('.').pop()
@@ -175,11 +171,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         fileNameSlug &&
         ext.includes(extension) &&
         !lists.includes(fileNameSlug)
-        // lists.length < 3
       ) {
         const tempPath = file[1].filepath
-        // const fileName = file[1].originalFilename
-        // const fileNameUpload = slugName(file[1].originalFilename)
         await fs.copyFile(tempPath, directory + fileNameSlug)
         await fs.rm(tempPath)
         const costvectoristionfile = await getDocAndCost(directory, file)
