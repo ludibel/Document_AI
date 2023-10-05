@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useContext } from 'react'
 // import react-dropzone
 import { FileWithPath, useDropzone } from 'react-dropzone'
 // import context
@@ -14,10 +14,13 @@ import {
   StyledGridTable,
   StyledTypoTitleTable,
   StyledIconButton,
+  StyledButtonEmbedding,
+  StyledGridContainer,
 } from './StyledDropZone'
 // import mui
 import {
   Box,
+  Grid,
   Paper,
   Table,
   TableBody,
@@ -36,7 +39,7 @@ import slugName from '@/utils/functions/slugName'
 // import types
 import { DropZoneProps } from '@/utils/types/dropZone'
 
-const DropZone = ({ deleteFile }: DropZoneProps) => {
+const DropZone = ({ deleteFile, onUploadSuccess }: DropZoneProps) => {
   // hooks pour gérer l'alerte
   const [openAlert, setOpenAlert] = useState(false)
   // hooks pour gérer le status de l'alerte
@@ -63,7 +66,10 @@ const DropZone = ({ deleteFile }: DropZoneProps) => {
     setFileName,
     setIsFileUploaded,
     isFileUploaded,
-  } = React.useContext(FileContext) as FileContextProps
+    setIsFileVectorized,
+    setOpenDialogSuccessVectorisation,
+    setSelectValue,
+  } = useContext(FileContext) as FileContextProps
 
   // fonction qui permet de sousmettre le formulaire et ainsi envoyer tous les fichiers en une seule fois au serveur
   const handleFileUpload = async (file: File) => {
@@ -96,7 +102,44 @@ const DropZone = ({ deleteFile }: DropZoneProps) => {
         setLoading(false)
       }
     } catch (error) {
-      alert(`le fichier n'a pas pu être uploadé ${error}`)
+      setOpenAlert(true)
+      setStatusAlert('fail')
+      setMessage(`Une erreur s'est produite lors de l'upload du fichier`)
+    }
+  }
+
+  const handleEmbedding = async () => {
+    try {
+      const response = await fetch('/api/vectorisation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ document, fileName }),
+      })
+      const responseStatus = await response.json()
+      if (responseStatus.status === 'ok') {
+        setOpenAlert(true)
+        setStatusAlert('ok')
+        setMessage(responseStatus.message)
+        setIsFileVectorized(true)
+        // recupération de la liste des collections
+        // TODO
+        // fermeture dialogDropzone
+        onUploadSuccess()
+        // ouverture dialogSuccess
+        setOpenDialogSuccessVectorisation(true)
+        setSelectValue(true)
+      }
+      if (responseStatus.status === 'fail') {
+        setOpenAlert(true)
+        setStatusAlert('fail')
+        setMessage(responseStatus.message)
+      }
+    } catch (error) {
+      setOpenAlert(true)
+      setStatusAlert('fail')
+      setMessage(`Une erreur s'est produite lors de la vectorisation`)
     }
   }
   const onDrop = useCallback(async (acceptedFiles: FileWithPath[]) => {
@@ -141,7 +184,7 @@ const DropZone = ({ deleteFile }: DropZoneProps) => {
   // getRootProps permet d'obtenir les fonctionnalités de drag and drop
   // open est passé à Button pour lui permettre d'ouvrir le répertoire de fichiers
   // getInputProps utilisé pour créer la zone de drag and drop
-  // acceptedFiles vérifie si les fichiers sont accéptés selon des contraintes définies
+  // acceptedFiles vérifie si les fichiers sont acceptés selon des contraintes définies
   // noClick et noKeyBoard si ils sont à true permettent de ne pas pouvoir ouvrir le gestionnaire de fichier en cliquant sur la dropzone ou en appuyant sur les touches entrée et espace
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
@@ -193,45 +236,59 @@ const DropZone = ({ deleteFile }: DropZoneProps) => {
         )}
       </StyledContainer>
       {loading && <StyledCircularProgress />}
-      {isFileUploaded && (
-        <StyledGridTable item xs={12}>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <StyledTypoTitleTable>Nom du fichier</StyledTypoTitleTable>
-                  </TableCell>
-                  <TableCell>
-                    <StyledTypoTitleTable>
-                      Vectorisation openAI
-                    </StyledTypoTitleTable>
-                  </TableCell>
-                  <TableCell>
-                    <StyledTypoTitleTable>Supprimer</StyledTypoTitleTable>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell>{fileName}</TableCell>
-                  <TableCell align="center">
-                    <Typography> $ {costFile} </Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <StyledIconButton
-                      onClick={() => deleteFile(fileName)}
-                      aria-label="supprimer le fichier"
-                    >
-                      <DeleteIcon />
-                    </StyledIconButton>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </StyledGridTable>
-      )}
+      <StyledGridContainer container direction="row" spacing={2}>
+        {isFileUploaded && (
+          <StyledGridTable item xs={12}>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
+                      <StyledTypoTitleTable>
+                        Nom du fichier
+                      </StyledTypoTitleTable>
+                    </TableCell>
+                    <TableCell>
+                      <StyledTypoTitleTable>
+                        Vectorisation openAI
+                      </StyledTypoTitleTable>
+                    </TableCell>
+                    <TableCell>
+                      <StyledTypoTitleTable>Supprimer</StyledTypoTitleTable>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>{fileName}</TableCell>
+                    <TableCell align="center">
+                      <Typography> $ {costFile} </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <StyledIconButton
+                        onClick={() => deleteFile(fileName)}
+                        aria-label="supprimer le fichier"
+                      >
+                        <DeleteIcon />
+                      </StyledIconButton>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </StyledGridTable>
+        )}
+        <Grid item xs={12}>
+          <StyledButtonEmbedding
+            variant="contained"
+            fullWidth
+            onClick={() => handleEmbedding()}
+            disabled={!fileName}
+          >
+            Vectorisation
+          </StyledButtonEmbedding>
+        </Grid>
+      </StyledGridContainer>
     </StyledBox>
   )
 }

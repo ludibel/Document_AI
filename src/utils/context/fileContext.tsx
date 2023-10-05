@@ -16,6 +16,10 @@ export interface FileContextProps {
   setIsFileVectorized: Dispatch<SetStateAction<boolean>>
   showFile: boolean
   setShowFile: Dispatch<SetStateAction<boolean>>
+  openDialogSuccessVectorisation: boolean
+  setOpenDialogSuccessVectorisation: Dispatch<SetStateAction<boolean>>
+  selectValue: boolean
+  setSelectValue: Dispatch<SetStateAction<boolean>>
 }
 
 const FileContext = createContext<FileContextProps | undefined>(undefined)
@@ -25,6 +29,10 @@ export const FileProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [fileName, setFileName] = useState('')
   const [isFileVectorized, setIsFileVectorized] = useState(false)
   const [showFile, setShowFile] = useState(false)
+  const [openDialogSuccessVectorisation, setOpenDialogSuccessVectorisation] =
+    useState(false)
+  const [selectValue, setSelectValue] = useState(false)
+
   return (
     <FileContext.Provider
       value={{
@@ -36,6 +44,10 @@ export const FileProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setIsFileVectorized,
         showFile,
         setShowFile,
+        openDialogSuccessVectorisation,
+        setOpenDialogSuccessVectorisation,
+        selectValue,
+        setSelectValue,
       }}
     >
       {children}

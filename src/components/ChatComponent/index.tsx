@@ -3,6 +3,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import ChatBox from '@/components/ChatBox'
 import DialogDropZone from '@/components/DialogDropZone'
 import DialogRemoveFile from '@/components/DialogRemoveFile'
+import DialogSuccess from '@/components/DialogSuccess'
 // import style
 import { Grid } from '@mui/material'
 import { StyledGridLeft, StyledGridcontainer } from './StyledChat'
@@ -16,10 +17,14 @@ const Chat = () => {
   const [openAlert, setOpenAlert] = useState(false)
   const [statusAlert, setStatusAlert] = useState('')
   const [messageAlert, setMessageAlert] = useState('')
-
-  const { setIsFileUploaded, fileName, setFileName, setShowFile } = useContext(
-    FileContext
-  ) as FileContextProps
+  const {
+    setIsFileUploaded,
+    fileName,
+    setFileName,
+    setShowFile,
+    openDialogSuccessVectorisation,
+    setOpenDialogSuccessVectorisation,
+  } = useContext(FileContext) as FileContextProps
   // fermeture de l'alerte au bout de 2 secondes
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -47,6 +52,10 @@ const Chat = () => {
   }
   const handleCloseDialogRemoveFile = () => {
     setOpenDialogRemoveFile(false)
+  }
+  // gestion dialogSuccess vectorisation
+  const handleCloseDialogSuccessVectorisation = () => {
+    setOpenDialogSuccessVectorisation(false)
   }
 
   // suppression du fichier
@@ -98,6 +107,12 @@ const Chat = () => {
         handleClose={handleCloseDialogRemoveFile}
         handleNotRemove={handleCloseDialogRemoveFile}
         handleRemove={handleRemove}
+      />
+      <DialogSuccess
+        open={openDialogSuccessVectorisation}
+        handleClose={handleCloseDialogSuccessVectorisation}
+        title="Document vectorisé avec succés"
+        content="Vous pouvez maintenant poser vos questions dans le chat"
       />
       <StyledGridcontainer
         container

@@ -15,23 +15,23 @@ interface StyledContainerProps {
   isdisabled?: boolean
 }
 
-export const StyledContainer = styled(Grid)<StyledContainerProps>(
-  ({ theme, isdisabled }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '1em',
-    borderRadius: 16,
-    backgroundColor: isdisabled
-      ? theme.palette.secondary.light
-      : theme.palette.primary.light,
-    color: theme.palette.secondary.main,
-    outline: 'none',
-    transition: `border 0.24s ease-in-out`,
-    textAlign: 'center',
-    margin: 'auto',
-  })
-)
+export const StyledContainer = styled(Grid, {
+  shouldForwardProp: (prop) => prop !== 'isdisabled',
+})<StyledContainerProps>(({ theme, isdisabled }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: '1em',
+  borderRadius: 16,
+  backgroundColor: isdisabled
+    ? theme.palette.secondary.light
+    : theme.palette.primary.light,
+  color: theme.palette.secondary.main,
+  outline: 'none',
+  transition: `border 0.24s ease-in-out`,
+  textAlign: 'center',
+  margin: 'auto',
+}))
 
 export const StyledBox = styled(Box)({
   textAlign: 'center',

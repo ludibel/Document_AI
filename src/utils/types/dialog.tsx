@@ -18,3 +18,10 @@ export interface DialogAlertProps {
   status: 'error' | 'success' | 'info' | 'warning' | undefined
   message: string
 }
+
+export interface DialogSuccessProps {
+  open: boolean
+  handleClose: () => void
+  title: string
+  content: string
+}

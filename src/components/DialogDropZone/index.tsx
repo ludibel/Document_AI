@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
+// import context
+import FileContext, { FileContextProps } from '@/utils/context/fileContext'
 // import components
 import TitleDialog from '@/components/TitleDialog'
 import DropZone from '@/components/DropZone'
@@ -17,12 +19,28 @@ const DialogDropZone = ({
   messageAlert,
   notHandleClose,
 }: DialogDropZoneProps) => {
+  const { isFileUploaded, fileName, isFileVectorized } = useContext(
+    FileContext
+  ) as FileContextProps
   return (
-    <StyledDialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+    <StyledDialog
+      open={open}
+      onClose={
+        isFileUploaded && !isFileVectorized ? notHandleClose : handleClose
+      }
+      maxWidth="sm"
+      fullWidth
+    >
       <TitleDialog
-        onClose={handleClose}
-        id="dialog-title"
-        title={'Enregistrez votre document'}
+        onClose={
+          isFileUploaded && !isFileVectorized ? notHandleClose : handleClose
+        }
+        id="dialogDropZone-title"
+        title={
+          isFileUploaded
+            ? `Enregistrez votre document: ${fileName}`
+            : 'Enregistrez votre document'
+        }
       />
       <StyledDialogContent dividers>
         {openAlert && statusAlert === 'ok' && (
@@ -31,10 +49,16 @@ const DialogDropZone = ({
         {openAlert && statusAlert === 'fail' && (
           <MessageAlert status="error" message={messageAlert} />
         )}
-        <DropZone deleteFile={notHandleClose} />
+        <DropZone deleteFile={notHandleClose} onUploadSuccess={handleClose} />
       </StyledDialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Annuler</Button>
+        <Button
+          onClick={
+            isFileUploaded && !isFileVectorized ? notHandleClose : handleClose
+          }
+        >
+          Annuler
+        </Button>
       </DialogActions>
     </StyledDialog>
   )
