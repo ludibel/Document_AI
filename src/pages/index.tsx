@@ -5,6 +5,8 @@ import { Grid } from '@mui/material'
 import Hero from '@/components/Hero'
 import Chat from '@/components/ChatComponent'
 
+import { FileProvider } from '@/utils/context/fileContext'
+
 const Home = () => {
   return (
     <>
@@ -24,7 +26,9 @@ const Home = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Chat />
+          <FileProvider>
+            <Chat />
+          </FileProvider>
         </Grid>
       </Grid>
     </>

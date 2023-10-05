@@ -24,7 +24,7 @@ const handleCopyClick = (content: string) => {
       alert('Copié dans le presser papier')
     })
     .catch(() => {
-      elert('Erreur lors de la copie dans le presse papier')
+      alert('Erreur lors de la copie dans le presse papier')
     })
 }
 // composant permettant d'analyser le contenu md des messages et de les afficher en format html
