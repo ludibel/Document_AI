@@ -15,6 +15,7 @@ const DialogDropZone = ({
   openAlert,
   statusAlert,
   messageAlert,
+  notHandleClose,
 }: DialogDropZoneProps) => {
   return (
     <StyledDialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
@@ -30,7 +31,7 @@ const DialogDropZone = ({
         {openAlert && statusAlert === 'fail' && (
           <MessageAlert status="error" message={messageAlert} />
         )}
-        <DropZone />
+        <DropZone deleteFile={notHandleClose} />
       </StyledDialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Annuler</Button>

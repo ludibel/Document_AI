@@ -4,6 +4,7 @@ export interface DialogDropZoneProps {
   openAlert: boolean
   statusAlert: 'ok' | 'fail' | undefined
   messageAlert: string
+  notHandleClose: () => void
 }
 
 export interface DialogTitleProps {

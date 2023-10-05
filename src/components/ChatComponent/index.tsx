@@ -28,7 +28,14 @@ const Chat = () => {
     setOpenDialogDropZone(false)
     setIsFileUploaded(false)
   }
-
+  // open dialogRemoveFile
+  const notHandleClose = () => {
+    setOpenDialogDropZone(true)
+    const timer = setTimeout(() => {
+      setOpenAlert(false)
+    }, 2000)
+    return () => clearTimeout(timer)
+  }
   return (
     <>
       <DialogDropZone
@@ -37,6 +44,7 @@ const Chat = () => {
         openAlert={openAlert}
         statusAlert={statusAlert}
         messageAlert={messageAlert}
+        notHandleClose={notHandleClose}
       />
       <StyledGridcontainer
         container

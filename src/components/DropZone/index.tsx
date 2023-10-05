@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react'
 // import react-dropzone
 import { FileWithPath, useDropzone } from 'react-dropzone'
+// import context
+import FileContext, { FileContextProps } from '@/utils/context/fileContext'
 // import components
 import MessageAlert from '@/components/MessageAlert'
 // import style
@@ -8,28 +10,86 @@ import {
   StyledBox,
   StyledContainer,
   StyledButtonDropZone,
+  StyledCircularProgress,
+  StyledGridTable,
+  StyledTypoTitleTable,
+  StyledIconButton,
 } from './StyledDropZone'
 // import mui
-import { Box, Typography } from '@mui/material'
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material'
 // import icon mui
 import UploadIcon from '@mui/icons-material/Upload'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
+import DeleteIcon from '@mui/icons-material/Delete'
 // import functions
 import slugName from '@/utils/functions/slugName'
+// import types
+import { DropZoneProps } from '@/utils/types/dropZone'
 
-const DropZone = () => {
+const DropZone = ({ deleteFile }: DropZoneProps) => {
   // hooks pour gérer l'alerte
   const [openAlert, setOpenAlert] = useState(false)
   // hooks pour gérer le status de l'alerte
   const [statusAlert, setStatusAlert] = useState('')
   // hooks pour gérer le message de l'alerte
   const [message, setMessage] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [fileName, setFileName] = useState('')
-  const [isFileUploaded, setIsFileUploaded] = useState(false)
+  // hook pour gérer le coût du fichier
+  const [costFile, setCostFile] = useState(undefined)
+  // hooks loading
+  const [loading, setLoading] = useState<boolean>(false)
+  const [document, setDocument] = useState<Document | null>(null)
 
-  const handleFileUpload = () => {
-    console.log('handleFileUpload')
+  const {
+    setShowFile,
+    fileName,
+    setFileName,
+    setIsFileUploaded,
+    isFileUploaded,
+  } = React.useContext(FileContext) as FileContextProps
+
+  // fonction qui permet de sousmettre le formulaire et ainsi envoyer tous les fichiers en une seule fois au serveur
+  const handleFileUpload = async (file: File) => {
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/uploadFile', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const responseStatus = await response.json()
+      if (responseStatus.status === 'ok') {
+        setOpenAlert(true)
+        setStatusAlert('ok')
+        setMessage(responseStatus.message)
+        setCostFile(responseStatus.document.cost)
+        setDocument(responseStatus.document.doc)
+        setShowFile(true)
+        setLoading(false)
+      }
+
+      if (responseStatus.status === 'fail') {
+        setOpenAlert(true)
+        setStatusAlert('fail')
+        setMessage(responseStatus.message)
+        setFileName('')
+        setIsFileUploaded(false)
+        setLoading(false)
+      }
+    } catch (error) {
+      alert(`le fichier n'a pas pu être uploadé ${error}`)
+    }
   }
   const onDrop = useCallback(async (acceptedFiles: FileWithPath[]) => {
     if (acceptedFiles.length === 0) {
@@ -124,6 +184,46 @@ const DropZone = () => {
           </Box>
         )}
       </StyledContainer>
+      {loading && <StyledCircularProgress />}
+      {isFileUploaded && (
+        <StyledGridTable item xs={12}>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <StyledTypoTitleTable>Nom du fichier</StyledTypoTitleTable>
+                  </TableCell>
+                  <TableCell>
+                    <StyledTypoTitleTable>
+                      Vectorisation openAI
+                    </StyledTypoTitleTable>
+                  </TableCell>
+                  <TableCell>
+                    <StyledTypoTitleTable>Supprimer</StyledTypoTitleTable>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>{fileName}</TableCell>
+                  <TableCell align="center">
+                    <Typography> $ {costFile} </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <StyledIconButton
+                      onClick={() => deleteFile(fileName)}
+                      aria-label="supprimer le fichier"
+                    >
+                      <DeleteIcon />
+                    </StyledIconButton>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </StyledGridTable>
+      )}
     </StyledBox>
   )
 }
