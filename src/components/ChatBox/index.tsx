@@ -1,4 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useContext, useEffect } from 'react'
+// import langchain
+import { BaseMessage, HumanMessage, AIMessage } from 'langchain/schema'
 // import components
 import ListMessageChat from '@/components/ChatBox/ListMessages'
 // import Styled
@@ -16,17 +18,10 @@ import { Grid, Box, InputAdornment, IconButton } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 // import types
 import { InputMessageProps } from '@/utils/types/messages'
+import { messageChatGPT } from '@/utils/types/messages'
+// import context
+import FileContext, { FileContextProps } from '@/utils/context/fileContext'
 
-const messages = [
-  {
-    role: 'assitant',
-    content: 'Bonjour, comment puis-je vous aider?',
-  },
-  {
-    role: 'assistant',
-    content: 'Bonjour',
-  },
-]
 const InputMessage = ({
   query,
   setQuery,
@@ -76,16 +71,85 @@ const InputMessage = ({
   )
 }
 const ChatBox = () => {
+  const ref = useRef<HTMLInputElement>(null)
+  const [fileNameHistory, setFileNameHistory] = useState<string | undefined>(
+    undefined
+  )
   const [query, setQuery] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
+  const { selectValue, fileName } = useContext(FileContext) as FileContextProps
+  // va permettre d'ajouter le nom du fichier dans l'historique des messages
+  interface BaseMessageWithName extends BaseMessage {
+    name: string
+  }
+  // state initiales pour les messages
+  const [messageState, setMessageState] = useState<{
+    messages: messageChatGPT[]
+    history: BaseMessageWithName[]
+  }>({
+    messages: [
+      {
+        content: 'Que souhaitez-vous savoir sur ce document ?',
+        role: 'assistant',
+      },
+    ],
+    // history doit contenir le nom du fichier
+    history: [],
+  })
+  const { messages, history } = messageState
+
+  // gestion du scrool sur la liste des messages
+  useEffect(() => {
+    const scrollToBottom = () => {
+      if (ref.current) {
+        ref.current.scrollTop = ref.current.scrollHeight
+      }
+    }
+    scrollToBottom()
+  }, [messages])
+  // Mise à jour de  fileNameHistory lorsque history change
+  useEffect(() => {
+    if (history.length > 0) {
+      setFileNameHistory(history[history.length - 1].name)
+    }
+  }, [history])
+
   const sendMessage = (message: string) => {
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
     }, 2000)
   }
-
-  const ref = useRef<HTMLInputElement>(null)
+  // gestion de l'historique en fonction du nom du fichier
+  useEffect(() => {
+    if (fileNameHistory !== fileName) {
+      setMessageState((state) => ({
+        ...state,
+        messages: [
+          {
+            content: 'Que souhaitez-vous savoir sur ce document',
+            role: 'assistant',
+          },
+        ],
+        history: [],
+      }))
+    }
+  }, [fileName, fileNameHistory])
+  // si pas de fichier selectionné
+  useEffect(() => {
+    if (!selectValue) {
+      setMessageState((state) => ({
+        ...state,
+        messages: [
+          {
+            content: 'Merci de sélectionner un fichier',
+            role: 'assistant',
+          },
+        ],
+        history: [],
+      }))
+    }
+  }, [selectValue])
   return (
     <StyledBox elevation={3}>
       <Grid
