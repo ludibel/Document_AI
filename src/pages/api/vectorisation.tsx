@@ -1,10 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-// import langchain
+// 2. Import OpenAI language model et langchain modules
 import { Chroma } from 'langchain/vectorstores/chroma'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
-// import types
-import { Result } from '../../utils/types/resultApi'
+import { Result } from '@/utils/types/resultApi'
 
 // types
 interface DocumentLoaderType {
@@ -26,8 +25,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       message: `Une erreur s'est produite lors de la vectorisation du fichier.`,
     },
   }
-
-  // on récupere le document loadé
+  // on récupere le documant loader
   const documentLoader = req.body
   const name = documentLoader.fileName.split('.')[0]
   // fonction permettant de concatener le document
@@ -51,16 +49,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const splitDocuments = await splitter.createDocuments(documents)
 
+  // on crée le vector store avec chromadb
   try {
-    // on crée le vector store avec chroma
     await Chroma.fromDocuments(splitDocuments, new OpenAIEmbeddings(), {
       collectionName: name,
       url: 'http://docker_chromadb:8000',
     })
-    // on renvoie une reponse reussite
+
     res.status(successResult.status).json(successResult.resultBody)
   } catch (error) {
-    // on renvoie une reponse d'erreur
+    console.log(error)
     res.status(failureResult.status).json(failureResult.resultBody)
   }
 }

@@ -4,7 +4,7 @@ import { Grid } from '@mui/material'
 // import components
 import Hero from '@/components/Hero'
 import Chat from '@/components/ChatComponent'
-
+// import context
 import { FileProvider } from '@/utils/context/fileContext'
 
 const Home = () => {

@@ -38,6 +38,8 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import slugName from '@/utils/functions/slugName'
 // import types
 import { DropZoneProps } from '@/utils/types/dropZone'
+// import fonctions
+import { getFilesListVector } from '@/utils/functions/getListVectorStore'
 
 const DropZone = ({ deleteFile, onUploadSuccess }: DropZoneProps) => {
   // hooks pour gérer l'alerte
@@ -69,6 +71,7 @@ const DropZone = ({ deleteFile, onUploadSuccess }: DropZoneProps) => {
     setIsFileVectorized,
     setOpenDialogSuccessVectorisation,
     setSelectValue,
+    setListVector,
   } = useContext(FileContext) as FileContextProps
 
   // fonction qui permet de sousmettre le formulaire et ainsi envoyer tous les fichiers en une seule fois au serveur
@@ -124,7 +127,7 @@ const DropZone = ({ deleteFile, onUploadSuccess }: DropZoneProps) => {
         setMessage(responseStatus.message)
         setIsFileVectorized(true)
         // recupération de la liste des collections
-        // TODO
+        getFilesListVector(setListVector)
         // fermeture dialogDropzone
         onUploadSuccess()
         // ouverture dialogSuccess

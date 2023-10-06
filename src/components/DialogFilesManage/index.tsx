@@ -51,7 +51,6 @@ const DialogFileManage = ({ open, onClose }: DialogFileManageProps) => {
   // suppression d'un fichier dans public/upload, public/embeddings et chromadb
   const handleDeleteFile = async (file: string) => {
     // 1. récupération du nom du fichier
-    console.log('file', file)
     const fileName = file
     // 2. supprimer le fichier du dossier upload
     const response = await fetch('/api/deleteFile', {
@@ -63,7 +62,7 @@ const DialogFileManage = ({ open, onClose }: DialogFileManageProps) => {
     })
     const responseStatusDelete = await response.json()
     if (responseStatusDelete.status === 'ok') {
-      const chromadb = new ChromaClient({ path: 'http://docker_chromadb:8000' })
+      const chromadb = new ChromaClient('http://docker_chromadb:8000')
       chromadb
         .deleteCollection({ name: fileName })
         .then(() => {
