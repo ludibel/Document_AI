@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
+// import context
+import FileContext, { FileContextProps } from '@/utils/context/fileContext'
 // import style
 import {
   StyledCard,
@@ -15,14 +17,25 @@ import { FormControl, MenuItem, Select } from '@mui/material'
 import { ListFilesProps } from '@/utils/types/general'
 // import components
 import DialogFilesManage from '@/components/DialogFilesManage'
-
-const listVector = ['vector1', 'vector2', 'vector3', 'vector4', 'vector5']
+// import fonctions
+import getVectorCollection from '@/utils/functions/getVectorCollection'
 
 const ListFiles = ({ handleClickUpload }: ListFilesProps) => {
   const [selectedValue, setSelectedValue] = useState<string>('')
   const [openDialogFilesManage, setOpenDialogFilesManage] = useState(false)
-  const handleChange = (event: { target: { value: string } }) => {
-    setSelectedValue(event.target.value)
+  const { listVector, fileName, setFileName, setSelectValue, setVector } =
+    useContext(FileContext) as FileContextProps
+  // mise à jour de la valeur du select
+  useEffect(() => {
+    setSelectedValue(fileName || '')
+  }, [fileName])
+  const handleChange = async (event: { target: { value: string } }) => {
+    const nameFile = event.target.value
+    setSelectedValue(nameFile)
+    setFileName(nameFile)
+    setSelectValue(true)
+    // on recupere la collection de vector store dans le context
+    await getVectorCollection(nameFile, setVector)
   }
 
   const handleClickGestion = () => {
