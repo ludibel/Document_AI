@@ -2,7 +2,6 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -19,7 +18,7 @@
     "@types/node": "20.6.4",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
-    "chromadb": "^1.5.11",
+    "chromadb": "1.5.3",
     "d3-dsv": "2",
     "eslint": "8.50.0",
     "eslint-config-next": "13.5.2",

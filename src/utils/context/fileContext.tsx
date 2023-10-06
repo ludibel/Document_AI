@@ -20,6 +20,8 @@ export interface FileContextProps {
   setOpenDialogSuccessVectorisation: Dispatch<SetStateAction<boolean>>
   selectValue: boolean
   setSelectValue: Dispatch<SetStateAction<boolean>>
+  setListVector: Dispatch<SetStateAction<string[]>>
+  listVector: string[]
 }
 
 const FileContext = createContext<FileContextProps | undefined>(undefined)
@@ -32,6 +34,7 @@ export const FileProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [openDialogSuccessVectorisation, setOpenDialogSuccessVectorisation] =
     useState(false)
   const [selectValue, setSelectValue] = useState(false)
+  const [listVector, setListVector] = useState<string[]>([])
 
   return (
     <FileContext.Provider
@@ -48,6 +51,8 @@ export const FileProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setOpenDialogSuccessVectorisation,
         selectValue,
         setSelectValue,
+        listVector,
+        setListVector,
       }}
     >
       {children}
