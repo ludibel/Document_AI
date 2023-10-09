@@ -10,7 +10,7 @@ export interface DialogDropZoneProps {
 export interface DialogTitleProps {
   id: string
   children?: React.ReactNode
-  onClose: () => void
+  onClose?: () => void
   title?: string
 }
 
@@ -24,4 +24,10 @@ export interface DialogSuccessProps {
   handleClose: () => void
   title: string
   content: string
+}
+
+export interface DialogKeyOpenAIProps {
+  message: string
+  open: boolean
+  handleCloseDialog: () => void
 }
