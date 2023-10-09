@@ -27,7 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     // si elle existe on vérifie qu'elle est valide
     if (openAIKey) {
-      // verification d'authentification de la clé openAI avec API OpenAI
+      // vérification d'authentification de la clé openAI avec API OpenAI
       const response = await authentificatedKey(openAIKey)
       if (response) {
         res.status(response.status).json(response.resultBody)

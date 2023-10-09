@@ -21,6 +21,7 @@ const StyledGridContainer = styled(Grid)({
 })
 
 const Home = () => {
+  //  state pour afficher DialogSaveKey si la clé n'est pas renseignée
   const [messageKey, setMessageKey] = useState<string>('')
   const [open, setOpen] = useState<boolean>(false)
   // useEffect pour vérifier si la OPEN_AI_KEY est présente dans .env
