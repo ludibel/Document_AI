@@ -22,6 +22,8 @@ export interface FileContextProps {
   setSelectValue: Dispatch<SetStateAction<boolean>>
   setListVector: Dispatch<SetStateAction<string[]>>
   listVector: string[]
+  vector: object | undefined
+  setVector: Dispatch<SetStateAction<object | undefined>>
 }
 
 const FileContext = createContext<FileContextProps | undefined>(undefined)
@@ -35,6 +37,7 @@ export const FileProvider: FC<{ children: ReactNode }> = ({ children }) => {
     useState(false)
   const [selectValue, setSelectValue] = useState(false)
   const [listVector, setListVector] = useState<string[]>([])
+  const [vector, setVector] = useState<object | undefined>(undefined)
 
   return (
     <FileContext.Provider
@@ -53,6 +56,8 @@ export const FileProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setSelectValue,
         listVector,
         setListVector,
+        vector,
+        setVector,
       }}
     >
       {children}

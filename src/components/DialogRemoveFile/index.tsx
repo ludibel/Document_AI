@@ -1,6 +1,6 @@
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 import { StyledDialogTitle } from './StyledDialogRemoveFile'
-
+// import mui
 import {
   Button,
   Dialog,
@@ -8,7 +8,7 @@ import {
   DialogContent,
   DialogContentText,
 } from '@mui/material'
-import React from 'react'
+// import context
 import FileContext, { FileContextProps } from '@/utils/context/fileContext'
 
 interface DialogRemoveFileProps {

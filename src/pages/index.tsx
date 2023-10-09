@@ -1,11 +1,22 @@
 import Head from 'next/head'
 // import mui
 import { Grid } from '@mui/material'
+// import emtion styled
+import styled from '@emotion/styled'
 // import components
 import Hero from '@/components/Hero'
 import Chat from '@/components/ChatComponent'
 // import context
 import { FileProvider } from '@/utils/context/fileContext'
+
+const StyledGridContainer = styled(Grid)({
+  paddingBottom: '1em',
+  '@media (min-width: 1920px)': {
+    width: '80%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+})
 
 const Home = () => {
   return (
@@ -18,7 +29,7 @@ const Home = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Grid container spacing={2} direction="row">
+      <StyledGridContainer container spacing={2} direction="row">
         <Grid item xs={12}>
           <Hero
             title="Interrogez vos documents avec OPENAI"
@@ -30,7 +41,7 @@ const Home = () => {
             <Chat />
           </FileProvider>
         </Grid>
-      </Grid>
+      </StyledGridContainer>
     </>
   )
 }

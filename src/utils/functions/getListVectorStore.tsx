@@ -15,6 +15,6 @@ export const getFilesListVector = async (
     )
     setListVector(collectionNames)
   } catch (error) {
-    console.error(`Une erreur s'est produite :`, error)
+    alert(`Une erreur s'est produite :`, error)
   }
 }

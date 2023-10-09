@@ -1,12 +1,5 @@
 import styled from '@emotion/styled'
-import { DialogTitle, DialogContentText, Avatar } from '@mui/material'
-
-export const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-  margin: 0,
-  padding: theme.spacing(2),
-  color: theme.palette.primary.main,
-  fontWeight: 700,
-})) as typeof DialogTitle
+import { DialogContentText, Avatar, IconButton } from '@mui/material'
 
 export const StyledDialogContentText = styled(DialogContentText)(
   ({ theme }) => ({
@@ -18,3 +11,7 @@ export const StyledDialogContentText = styled(DialogContentText)(
 export const StyledAvatar = styled(Avatar)(({ theme }) => ({
   color: theme.palette.primary.main,
 }))
+
+export const StyledIconButton = styled(IconButton)({
+  color: '#ff0000',
+})

@@ -16,6 +16,7 @@
     "@mui/material": "^5.14.10",
     "@types/formidable": "^3.4.3",
     "@types/node": "20.6.4",
+    "@types/prismjs": "^1.26.1",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
     "chromadb": "1.5.3",
