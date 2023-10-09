@@ -1,6 +1,4 @@
 import React from 'react'
-// import components
-
 // import style
 import {
   StyledDialogTitle,

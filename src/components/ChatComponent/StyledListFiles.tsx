@@ -9,7 +9,7 @@ export const StyledCard = styled(Card)({
   padding: '0.5em',
   height: 400,
   '@media (min-width: 1024px)': {
-    height: 1000,
+    height: '100vh',
     padding: '0.3em',
   },
 })

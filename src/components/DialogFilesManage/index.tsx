@@ -11,7 +11,6 @@ import {
   ListItemAvatar,
   Avatar,
   ListItemText,
-  IconButton,
 } from '@mui/material'
 
 import DialogAlert from '@/components/MessageAlert'
@@ -19,7 +18,10 @@ import TitleDialog from '@/components/TitleDialog'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import FolderIcon from '@mui/icons-material/Folder'
-import { StyledDialogContentText } from './StyledDialogFilesManage'
+import {
+  StyledDialogContentText,
+  StyledIconButton,
+} from './StyledDialogFilesManage'
 
 import FileUploadContext, {
   FileContextProps,
@@ -113,13 +115,13 @@ const DialogFileManage = ({ open, onClose }: DialogFileManageProps) => {
             <ListItem
               key={`list - ${file}`}
               secondaryAction={
-                <IconButton
+                <StyledIconButton
                   edge="end"
                   aria-label="delete vector file"
                   onClick={() => handleDeleteFile(file)}
                 >
                   <DeleteIcon />
-                </IconButton>
+                </StyledIconButton>
               }
             >
               <ListItemAvatar>

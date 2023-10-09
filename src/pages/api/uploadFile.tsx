@@ -107,8 +107,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       form.on('error', (err) => reject(err))
       form.parse(req)
     }
-  ).catch((error) => {
-    console.log(error)
+  ).catch(() => {
     result.status = 500
     result.resultBody = {
       status: 'fail',

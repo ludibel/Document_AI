@@ -8,10 +8,9 @@ const getVectorCollection = async (
   const chromadb = new ChromaClient('http://docker_chromadb:8000')
   try {
     const vectorStore = await chromadb.getCollection({ name: name })
-    console.log('vector', vectorStore)
     setVector(vectorStore)
   } catch (err) {
-    console.log('err', err)
+    alert(`Une erreur s'est produite lors de la récupération du vector store`)
   }
 }
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 // import primjs
 import Prism from 'prismjs'
-// import style
+
 import { StyledCodeContainer, StyledButtonContainer } from './StyledCodeBlock'
 // import mui
 import { Button } from '@mui/material'

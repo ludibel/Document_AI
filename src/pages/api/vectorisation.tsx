@@ -58,7 +58,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     res.status(successResult.status).json(successResult.resultBody)
   } catch (error) {
-    console.log(error)
     res.status(failureResult.status).json(failureResult.resultBody)
   }
 }

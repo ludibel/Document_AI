@@ -12,9 +12,10 @@ import {
   StyledList,
   StyledTextField,
   StyledGridInput,
+  StyledBoxEmpty,
 } from './StyledChatBox'
 // import mui
-import { Grid, Box, InputAdornment, IconButton } from '@mui/material'
+import { Grid, InputAdornment, IconButton } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
 // import types
 import { InputMessageProps } from '@/utils/types/messages'
@@ -78,11 +79,11 @@ const ChatBox = () => {
   const [query, setQuery] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const { selectValue, fileName } = useContext(FileContext) as FileContextProps
-  // va permettre d'ajouter le nom du fichier dans l'historique des messages
+  // permet d'ajouter le nom du fichier dans l'historique des messages
   interface BaseMessageWithName extends BaseMessage {
     name: string
   }
-  // state initiales pour les messages
+  // state initiale pour les messages
   const [messageState, setMessageState] = useState<{
     messages: messageChatGPT[]
     history: BaseMessageWithName[]
@@ -114,12 +115,6 @@ const ChatBox = () => {
     }
   }, [history])
 
-  const sendMessage = (message: string) => {
-    setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
-    }, 2000)
-  }
   // gestion de l'historique en fonction du nom du fichier
   useEffect(() => {
     if (fileNameHistory !== fileName) {
@@ -127,7 +122,7 @@ const ChatBox = () => {
         ...state,
         messages: [
           {
-            content: 'Que souhaitez-vous savoir sur ce document',
+            content: 'Que souhaitez-vous savoir sur ce document ?',
             role: 'assistant',
           },
         ],
@@ -135,7 +130,7 @@ const ChatBox = () => {
       }))
     }
   }, [fileName, fileNameHistory])
-  // si pas de fichier selectionné
+  // state message si pas de fichier selectionné
   useEffect(() => {
     if (!selectValue) {
       setMessageState((state) => ({
@@ -150,6 +145,113 @@ const ChatBox = () => {
       }))
     }
   }, [selectValue])
+
+  const sendMessage = async (query: string) => {
+    // Vérifier si un fichier est sélectionné
+    if (!selectValue) {
+      setMessageState((state) => ({
+        ...state,
+        messages: [
+          ...state.messages,
+          {
+            role: 'assistant',
+            content: 'Merci de sélectionner un fichier',
+          } as messageChatGPT,
+        ],
+      }))
+      return
+    }
+
+    // Vérifier si la question est vide
+    if (!query) {
+      setMessageState((state) => ({
+        ...state,
+        messages: [
+          ...state.messages,
+          {
+            role: 'assistant',
+            content: 'Merci de poser une question',
+          } as messageChatGPT,
+        ],
+      }))
+      return
+    }
+
+    // Traiter la question
+    const question = query.trim()
+
+    // Ajouter la question de l'utilisateur aux messages
+    setMessageState((state) => ({
+      ...state,
+      messages: [
+        ...state.messages,
+        {
+          role: 'user',
+          content: question,
+        } as messageChatGPT,
+      ],
+    }))
+
+    setLoading(true)
+    setQuery('')
+
+    try {
+      // Envoyer la question en POST à l'API /api/chat
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question,
+          history,
+          fileName,
+        }),
+      })
+      const data = await response.json()
+
+      // Créer des objets de message
+      const req: BaseMessage = new HumanMessage(question)
+      const respond: BaseMessage = new AIMessage(data.text)
+
+      if (data.error) {
+        // Ajouter la réponse de l'assistant aux messages
+        setMessageState((state) => ({
+          ...state,
+          messages: [
+            ...state.messages,
+            {
+              role: 'assistant',
+              content:
+                'Un problème est survenu je ne peux pas répondre à votre question',
+            } as messageChatGPT,
+          ],
+        }))
+      } else {
+        // Ajouter la réponse de l'assistant aux messages
+        setMessageState((state) => ({
+          ...state,
+          messages: [
+            ...state.messages,
+            {
+              role: 'assistant',
+              content: data.text,
+            } as messageChatGPT,
+          ],
+          history: [
+            ...state.history,
+            req,
+            respond,
+            { name: fileName },
+          ] as BaseMessageWithName[],
+        }))
+      }
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+    }
+  }
+
   return (
     <StyledBox elevation={3}>
       <Grid
@@ -167,16 +269,7 @@ const ChatBox = () => {
             alignItems="flex-end"
           >
             <StyledGridMessage item xs={12}>
-              <StyledBoxList
-                ref={ref}
-                sx={{
-                  position: 'absolute',
-                  width: '100%',
-                  bottom: '100px',
-                  overflowY: 'scroll',
-                  maxHeight: '1000px',
-                }}
-              >
+              <StyledBoxList ref={ref}>
                 <StyledList>
                   {messages.map((message, index) => (
                     <ListMessageChat
@@ -187,7 +280,7 @@ const ChatBox = () => {
                   ))}
                 </StyledList>
               </StyledBoxList>
-              <Box sx={{ flexShrink: 0, height: '12rem' }}></Box>
+              <StyledBoxEmpty></StyledBoxEmpty>
             </StyledGridMessage>
             <InputMessage
               loading={loading}

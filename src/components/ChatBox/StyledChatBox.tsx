@@ -29,10 +29,7 @@ export const StyledTypoTitle = styled(Typography)(({ theme }) => ({
 export const StyledGridBox = styled(Grid)({
   position: 'relative',
   overflow: 'hidden',
-  height: '600px',
-  '@media (min-width: 1024px)': {
-    height: '1000px',
-  },
+  height: '100vh',
 })
 export const StyledList = styled(List)({
   paddingBottom: 0,
@@ -44,7 +41,14 @@ export const StyledTextField = styled(TextField)({
   '& ::placeholder': {
     opacity: 0.5,
   },
-  fontSize: '1.2em',
+  '& .MuiInputBase-input': {
+    fontSize: '1.2em',
+  },
+  '@media (min-width: 1024px)': {
+    '& .MuiInputBase-input': {
+      fontSize: '1.4em',
+    },
+  },
 })
 export const StyledFab = styled(Fab)(({ theme }) => ({
   position: 'fixed',
@@ -70,33 +74,17 @@ export const StyledGridInput = styled(Grid)({
   left: 0,
   zIndex: 1000,
 })
-export const StyledGridMessage = styled(Grid)(({ theme }) => ({
+export const StyledGridMessage = styled(Grid)({
   overflowY: 'auto',
-  height: '600px',
-  '&::-webkit-scrollbar': {
-    width: 5,
-    WebkitAppearance: 'none',
-  },
-
-  '&::-webkit-scrollbar-thumb': {
-    borderRadius: 8,
-    borderColor: theme.palette.primary.main,
-    backgroundColor: theme.palette.primary.main,
-  },
-  '&::-webkit-scrollbar-thumb:hover': {
-    backgroundColor: theme.palette.secondary.main,
-  },
-  '@media (min-width: 1024px)': {
-    height: '1000px',
-  },
-}))
+  height: 600,
+})
 
 export const StyledBoxList = styled(Box)(({ theme }) => ({
   position: 'absolute',
   width: '100%',
   bottom: '100px',
   overflowY: 'scroll',
-  maxHeight: '1000px',
+  maxHeight: '100vh',
   '&::-webkit-scrollbar': {
     width: 5,
     WebkitAppearance: 'none',
@@ -110,3 +98,8 @@ export const StyledBoxList = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.secondary.main,
   },
 }))
+
+export const StyledBoxEmpty = styled(Box)({
+  flexShrink: 0,
+  height: '12rem',
+})

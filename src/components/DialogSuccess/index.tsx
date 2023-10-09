@@ -1,6 +1,7 @@
 import React from 'react'
-// import style
-import { StyledDialogTitle } from './StyledDialogSuccess'
+// import Component
+import TitleDialog from '@/components/TitleDialog'
+
 // import mui
 import {
   Dialog,
@@ -26,10 +27,12 @@ const DialogSuccess = ({
       aria-labelledby="alert-dialogSuccess-title"
       aria-describedby="alert-dialogSuccess-description"
     >
-      <StyledDialogTitle id="alert-dialogSuccess-title">
-        {title}
-      </StyledDialogTitle>
-      <DialogContent>
+      <TitleDialog
+        onClose={handleClose}
+        title={title}
+        id="alert-dialogSuccess-title"
+      />
+      <DialogContent dividers>
         <DialogContentText id="alert-dialogSuccess-description">
           {content}
         </DialogContentText>

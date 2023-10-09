@@ -33,7 +33,7 @@ export default async function handler(
 
   const sanitizedQuestion = question.trim().replaceAll('\n', ' ')
 
-  // creation de la chaine
+  // création de la chaine
   try {
     const vectorStore = await Chroma.fromExistingCollection(
       new OpenAIEmbeddings(),
@@ -42,6 +42,7 @@ export default async function handler(
         url: 'http://docker_chromadb:8000',
       }
     )
+    console.log(vectorStore)
 
     const chain = makeChain(vectorStore, histories)
     // poser la question à l'IA en utilisant le chain

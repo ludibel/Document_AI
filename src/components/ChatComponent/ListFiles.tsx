@@ -34,7 +34,7 @@ const ListFiles = ({ handleClickUpload }: ListFilesProps) => {
     setSelectedValue(nameFile)
     setFileName(nameFile)
     setSelectValue(true)
-    // on recupere la collection de vector store dans le context
+    // on récupère la collection de vector store dans le context
     await getVectorCollection(nameFile, setVector)
   }
 
