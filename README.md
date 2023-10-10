@@ -1,38 +1,92 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Ceci est un projet [Next.js](https://nextjs.org/) créé avec [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
-First, run the development server:
+# Application Document AI de [ByLudivine.com](https://www.byludivine.com)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+Vous trouverez, dans ce dépot, le code source de mon application Document AI.
+
+> **il s'agit d'un environnement de développement, n'utilisez pas ce code et la configuration Docker associée en production**
+
+## Description
+
+Document AI est une application de chat vous permettant de communiquer avec vos documents au format pdf, txt, docs, csv, json en utilisant un LLM comme ChatGPT. Ces documents sont téléchargés et traités (vectorisation, stockage) via l'application afin de pouvoir être utilisés dans le chat.
+Cette application nécessite une clé API OPENAI pour fonctionner.
+
+Les compétences techniques à connaitre pour déployer cette application sont énumérées ci-dessous. Celles-ci ne feront pas l'objet d'explication au sein de ce README.
+
+- savoir utiliser docker / docker-compose
+- savoir créer une clé API sur OPENAI
+- connaitre Next.js
+
+<p align="center">
+<img src='./public/vue_DocumentAI.jpg' alt='Application Document AI'>
+</p>
+
+## Déploiement
+
+### Cloner le dépot github
+
+Assurez-vous de disposer de git, Docker et docker-compose installés sur votre environnement.
+Les commandes ci-dessous sont effectuées sous Linux
+
+```
+git clone https://github.com/ludibel/Document_AI
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Créer le fichier des variables d'environnement
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Placez-vous dans le répertoire du projet et renommez le fichier des variables d'environnement .env.example en .env
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```
+mv .env.example .env
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Déployer les containers docker
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```
+docker-compose up
+```
 
-## Learn More
+### Accéder à l'application
 
-To learn more about Next.js, take a look at the following resources:
+Rentrez en shell dans le conteneur Node qui héberge l'application
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+docker exec -it docker_node sh
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+L'invité de commande suivant apparait
 
-## Deploy on Vercel
+```
+ /app #
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Exécutez les commandes suivantes pour installer et lancer l'application
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+/app # yarn install
+```
+
+```
+/app # yarn dev
+```
+
+Ouvrez votre navigateur web et rendez-vous sur http://localhost:3000
+
+Pour visualiser les collections chromadb rendez-vous sur http://localhost:8000/api/v1/collections
+
+## Contribuer au projet
+
+### Licence
+
+Le projet est sous la licence open source [MIT](LICENSE.md)
+
+### Code de conduite
+
+Afin de contribuer dans un environnement sain et convivial merci de respecter le [code de conduite](CODE_OF_CONDUCT.md)
+
+### Comment contribuer
+
+Vous trouverez l'ensemble des directives à suivre pour contribuer au projet dans le fichier [Contributing](CONTRIBUTING.md)
